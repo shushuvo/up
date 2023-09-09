@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Submission</title>
+</head>
+<body>
+<h1>Form Submission</h1>
+
+<form method="POST" action="/uploadadmission">
+<label for="firstName">firstName:</label>
+<input type="text" id="firstName" name="firstName" pattern="^[^<> ]*$" ><br>
+
+<input type="submit" value="Submit">
+</form>
+
+<h1>User Data</h1>
+<ul id="user-list">
+<!-- User data will be inserted here -->
+</ul>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+// Fetch user data from the API endpoint
+fetch('/api/admission')
+.then(response => response.json())
+.then(data => {
+const userList = document.getElementById('user-list');
+// Iterate through the data and create list items for each user
+data.forEach(user => {
+const listItem = document.createElement('li');
+listItem.innerHTML = `
+<strong>Name:</strong> ${user.firstName} 
+<form method="POST" action="/deleteadmission">
+<input type="hidden" id="firstName" name="firstName" value=${user.firstName} ><br>
+<input type="submit" value="delete">
+</form>
+`;
+userList.appendChild(listItem);
+});
+})
+.catch(error => console.error('Error:', error));
+});
+</script>
+</body>
+</html>
